@@ -1,4 +1,3 @@
-// frontend/lib/validation.ts
 import { Contact } from "@/app/interfaces/contact";
 
 export function validateContactForm(form: Partial<Contact>): string | null {
@@ -21,5 +20,5 @@ export function validateContactForm(form: Partial<Contact>): string | null {
     return 'Le pays ne doit pas contenir de chiffres.';
   }
 
-  return null; // tout est bon ✅
+  return null;
 }
