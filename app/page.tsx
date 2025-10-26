@@ -11,8 +11,7 @@ export default function HomePage() {
             height={250}
             className="object-contain mb-5"
           />
-      <h1>Bienvenue sur la mini-app de gestion de contacts</h1>
-      <p>Cette application permet de visualiser et gérer vos contacts.</p>
+      <h1>Projet Comptastar</h1>
 
       <nav style={{ marginTop: '2rem' }}>
         <Link href="/contacts">
