@@ -53,8 +53,32 @@ export default function ContactsPage() {
     if (!file) return;
 
     try {
-      const parsed = await parseCSV(file);
-      setImported(parsed as Contact[]);
+      const rawData = await parseCSV(file); // tableau de lignes brutes
+      let nextId = contacts.length ? Math.max(...contacts.map(c => c.id)) + 1 : 1;
+
+      // Nettoyage et transformation
+      const cleaned: Contact[] = rawData.map((row: any) => {
+        const civilite = (row.civilite || '').trim();
+        const nom = (row.nom || '').trim();
+        const prenom = (row.prenom || '').trim();
+        const email = (row.email || '').trim().toLowerCase();
+        const telephone = (row.telephone || '').trim();
+        const pays = (row.pays || '').trim();
+
+        return { id: nextId++, civilite, nom, prenom, email, telephone, pays };
+      })
+      // Filtrer les lignes invalides selon les regex
+      .filter(c => {
+        const emailRegex = /^[\w.-]+@[a-zA-Z\d.-]+\.[a-zA-Z]{2,}$/;
+        const phoneRegex = /^[0-9]+$/;
+        const countryRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;
+        return c.civilite && c.nom && c.prenom && c.email && c.telephone && c.pays
+          && emailRegex.test(c.email)
+          && phoneRegex.test(c.telephone)
+          && countryRegex.test(c.pays);
+      });
+
+      setImported(cleaned);
       setError(null);
     } catch (err) {
       console.error(err);
@@ -62,46 +86,68 @@ export default function ContactsPage() {
     }
   };
 
+  const handleImportSubmit = async () => {
+    try {
+      const res = await fetch('/api/contacts/import', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(imported),
+      });
+      if (res.ok) {
+        alert('Contacts importés avec succès');
+        setImported([]);
+        fetchContacts();
+      } else {
+        alert('Erreur lors de l’import');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('Erreur lors de l’import');
+    }
+  };
+
   return (
     <main style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
       <h1>Gestion des Contacts</h1>
 
-      {/* --- Formulaire --- */}
-      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-            <select value={form.civilite || ''} onChange={e => setForm({ ...form, civilite: e.target.value })}>
+      {/* --- Formulaire et import CSV --- */}
+      <div style={{ display: 'flex', alignItems: 'flex-start', gap: '1rem', flexWrap: 'wrap', marginBottom: '2rem' }}>
+        <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+          <select value={form.civilite || ''} onChange={e => setForm({ ...form, civilite: e.target.value })}>
             <option value="">Civilité</option>
             <option value="Monsieur">Monsieur</option>
             <option value="Madame">Madame</option>
             <option value="Mademoiselle">Mademoiselle</option>
-            </select>
-            <input placeholder="Nom" value={form.nom || ''} onChange={e => setForm({ ...form, nom: e.target.value })} />
-            <input placeholder="Prénom" value={form.prenom || ''} onChange={e => setForm({ ...form, prenom: e.target.value })} />
-            <input placeholder="Email" value={form.email || ''} onChange={e => setForm({ ...form, email: e.target.value })} />
-            <input placeholder="Téléphone" value={form.telephone || ''} onChange={e => setForm({ ...form, telephone: e.target.value })} />
-            <input placeholder="Pays" value={form.pays || ''} onChange={e => setForm({ ...form, pays: e.target.value })} />
-
-            <button type="submit">{form.id ? 'Modifier' : 'Ajouter manuellement'}</button>
+          </select>
+          <input placeholder="Nom" value={form.nom || ''} onChange={e => setForm({ ...form, nom: e.target.value })} />
+          <input placeholder="Prénom" value={form.prenom || ''} onChange={e => setForm({ ...form, prenom: e.target.value })} />
+          <input placeholder="Email" value={form.email || ''} onChange={e => setForm({ ...form, email: e.target.value })} />
+          <input placeholder="Téléphone" value={form.telephone || ''} onChange={e => setForm({ ...form, telephone: e.target.value })} />
+          <input placeholder="Pays" value={form.pays || ''} onChange={e => setForm({ ...form, pays: e.target.value })} />
+          <button type="submit">{form.id ? 'Modifier' : 'Ajouter manuellement'}</button>
         </form>
 
-      
-        {/* --- Import CSV --- */}
-        <input type="file" accept=".csv" onChange={handleImport} />
+        <div>
+          <input type="file" accept=".csv" onChange={handleImport} />
+          
+        </div>
       </div>
 
-      {/* --- Tableau import CSV --- */}
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+
+      {/* --- Tableau des données importées --- */}
       {imported.length > 0 && (
         <>
           <h2>Données importées</h2>
-          <table border={1} cellPadding={5} style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <table border={1} cellPadding={5} style={{ borderCollapse: 'collapse' }}>
             <thead>
               <tr>
-                <th style={{ textAlign: 'left' }}>Civilité</th>
-                <th style={{ textAlign: 'left' }}>Nom</th>
-                <th style={{ textAlign: 'left' }}>Prénom</th>
-                <th style={{ textAlign: 'left' }}>Email</th>
-                <th style={{ textAlign: 'left' }}>Téléphone</th>
-                <th style={{ textAlign: 'left' }}>Pays</th>
+                <th>Civilité</th>
+                <th>Nom</th>
+                <th>Prénom</th>
+                <th>Email</th>
+                <th>Téléphone</th>
+                <th>Pays</th>
               </tr>
             </thead>
             <tbody>
@@ -118,52 +164,26 @@ export default function ContactsPage() {
             </tbody>
           </table>
           {imported.length > 0 && (
-            <button
-                onClick={async () => {
-                    try {
-                        const res = await fetch('/api/contacts/import', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(imported),
-                        });
-                        if (res.ok) {
-                            alert('Contacts importés avec succès');
-                            setImported([]); // vider la liste importée
-                            fetchContacts(); // recharger les contacts existants
-                        } else {
-                            alert('Erreur lors de l’import');
-                        }
-                    } catch (err) {
-                        console.error(err);
-                        alert('Erreur lors de l’import');
-                    }
-                }}
-
-            >
-                Importer dans la base
+            <button onClick={handleImportSubmit} style={{ display: 'block', marginTop: '0.5rem' }}>
+              Importer dans la base
             </button>
           )}
         </>
       )}
 
-
-
-      {error && <p style={{ color: 'white' }}>{error}</p>}
-
-
-      {/* --- Tableau principal --- */}
+      {/* --- Tableau des contacts existants --- */}
       <h2>Contacts enregistrés</h2>
       <table border={1} cellPadding={5} style={{ borderCollapse: 'collapse', marginBottom: '2rem' }}>
         <thead>
           <tr>
-            <th style={{ textAlign: 'left' }}>ID</th>
-            <th style={{ textAlign: 'left' }}>Civilité</th>
-            <th style={{ textAlign: 'left' }}>Nom</th>
-            <th style={{ textAlign: 'left' }}>Prénom</th>
-            <th style={{ textAlign: 'left' }}>Email</th>
-            <th style={{ textAlign: 'left' }}>Téléphone</th>
-            <th style={{ textAlign: 'left' }}>Pays</th>
-            <th style={{ textAlign: 'left' }}>Actions</th>
+            <th>ID</th>
+            <th>Civilité</th>
+            <th>Nom</th>
+            <th>Prénom</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Pays</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
@@ -185,12 +205,9 @@ export default function ContactsPage() {
         </tbody>
       </table>
 
-
-
-      {/* <button type="submit">{form.id ? 'Modifier' : 'Ajouter'}</button> */}
       <div>
         <Link href="/" className="button">
-            Retour à l'accueil
+          Retour à l'accueil
         </Link>
       </div>
     </main>
