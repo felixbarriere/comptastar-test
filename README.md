@@ -5,7 +5,7 @@ Elle permet de gérer des contacts via un formulaire manuel ou un import CSV.
 
 ---
 
-## 🚀 Installation
+## Installation
 
 ### Prérequis
 
