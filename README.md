@@ -1,36 +1,91 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📚 Comptastar - Application CRUD
 
-## Getting Started
+**Comptastar** est une application CRUD full-stack développée avec **Next.js**.  
+Elle permet de gérer des contacts via un formulaire manuel ou un import CSV.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## Installation
+
+### Prérequis
+
+- **Node.js** (version 20.9 ou supérieure)  
+- Activer la bonne version via `nvm` :  
+```
+nvm use 21
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Installer et lancer le Frontend
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+git clone https://github.com/felixbarriere/comptastar-test/edit/main/README.md
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+cd comptastar-test
 
-## Learn More
+npm install
 
-To learn more about Next.js, take a look at the following resources:
+npm run dev
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Accéder à l'application
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Dans votre navigateur :
+http://localhost:3000
 
-## Deploy on Vercel
+## Structure de l’application
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+L’application suit les bonnes pratiques de [Next.js](https://nextjs.org/docs/app/getting-started/project-structure#organizing-your-project)
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Organisation générale :
+```
+app/
+├─ page.tsx/                 # Page d'accueil
+├─ contacts/
+│  ├─ page.tsx               # Page principale de gestion des contacts
+│  ├─ hooks/
+│  │  └─ useContacts.ts      # Hook personnalisé pour la logique CRUD et le formulaire
+│  ├─ lib/
+│  │  └─ validation.ts       # Fonctions utilitaires, ex: validation du formulaire
+│  └─ api/
+│     └─ route.ts            # Routes API pour CRUD contacts
+├─ components/
+│  └─ Header.tsx             # Composant d’en-tête réutilisable
+└─ ...
+```
+
+Les éléments communs sont à la racine, et les éléments spécifiques sont regroupés dans des dossiers dédiés (contacts, etc.).
+
+## Utilisation
+### Ajout manuel
+
+- Remplissez le formulaire avec les informations du contact.
+
+- Les formats doivent être respectés (numéros, email, etc.).
+
+- Des alertes indiquent les erreurs si les formats sont incorrects.
+
+### Import CSV
+
+- Le fichier CSV doit respecter les formats attendus.
+
+- Seuls les contacts valides seront importés.
+
+- Une alerte confirme l’import des contacts valides et ignore les contacts invalides.
+
+
+## Tests
+
+L’application utilise Jest pour les tests unitaires.
+
+Pour lancer les tests :
+
+```npm run test```
+
+
+Les tests vérifient notamment :
+
+- Le fonctionnement du formulaire principal
+
+- La validation des champs
+
+- L’ajout et la gestion des contacts
