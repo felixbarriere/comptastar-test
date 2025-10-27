@@ -17,10 +17,18 @@ export function useContacts() {
     fetchContacts();
   }, []);
 
-  const fetchContacts = () => {
-    fetch('/contacts/api')
-      .then(res => res.json())
-      .then(data => setContacts(data));
+  const fetchContacts = async () => {
+    try {
+      const res = await fetch('/contacts/api');
+      if (!res.ok) return;
+  
+      const text = await res.text();
+      const data = text ? JSON.parse(text) : [];
+      setContacts(data);
+    } catch (err) {
+      console.error(err);
+      setContacts([]);
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -28,6 +36,12 @@ export function useContacts() {
     const validationError = validateContactForm(form);
     if (validationError) return setError(validationError);
     setError(null);
+
+    const exists = contacts.some(c => c.email === form.email);
+    if (exists) {
+      setError("Un contact avec cet e-mail existe déjà.");
+      return;
+    }
 
     const method = form.id ? 'PUT' : 'POST';
     await fetch('/contacts/api', {
@@ -68,13 +82,21 @@ export function useContacts() {
   const handleImportSubmit = async () => {
     try {
       const transformed = transformContacts(imported);
-      const validContacts = transformed.filter(c => !validateContactForm(c));
+      const validContacts = transformed.filter(c => {
+        const error = validateContactForm(c);
+            if (error) return false;
+    
+            const isDuplicate = contacts.some(existing => existing.email === c.email);
+            return !isDuplicate;
+      });
 
       if (validContacts.length === 0) {
         alert("Aucun contact valide à importer.");
         setImported([]);
         return;
       }
+      
+      console.log({validContacts})
 
       const res = await fetch('/contacts/api/import', {
         method: 'POST',
@@ -83,7 +105,7 @@ export function useContacts() {
       });
 
       if (res.ok) {
-        alert('Contacts importés avec succès');
+        alert('Contacts importés avec succès.\nLes contacts invalides ne sont pas pris en compte');
         setImported([]);
         fetchContacts();
       } else {

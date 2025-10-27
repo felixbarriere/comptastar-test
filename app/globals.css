@@ -26,6 +26,10 @@ h2 {
   margin-top: 15px;
 }
 
+.mg-b-25 {
+  margin-bottom: 25px;
+}
+
 .home-nav {
   display: inline-block;
   text-align: center;
@@ -34,6 +38,12 @@ h2 {
   padding: 0.5rem 1rem;
   background-color: var(--foreground);
   color: black
+}
+
+.contact-container {
+  border: 1px solid white;
+  padding: 15px;
+  border-radius: 5px;
 }
 
 /* buttons */
@@ -84,7 +94,6 @@ input[type="file"] {
   font-family: inherit;
   font-size: 1rem;
   color: #333;
-  padding: 0.2rem;
 }
 
 input[type="file"]::file-selector-button {
