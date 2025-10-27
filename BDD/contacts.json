@@ -1,11 +1,1 @@
-[
-  {
-    "id": 1,
-    "civilite": "Monsieur",
-    "nom": "Bar",
-    "prenom": "Felix",
-    "email": "john.dow@test.fr",
-    "telephone": "1234567890",
-    "pays": "FR"
-  }
-]
+[]
