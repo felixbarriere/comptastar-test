@@ -21,7 +21,6 @@ export async function POST(request: Request) {
   const newContact = await request.json();
   const contacts = readContacts();
 
-  // Crée un nouvel ID unique
   newContact.id = contacts.length ? Math.max(...contacts.map((c: any) => c.id)) + 1 : 1;
 
   contacts.push(newContact);

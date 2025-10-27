@@ -1,4 +1,4 @@
-import { Contact } from "@/app/interfaces/contact";
+import { Contact } from "@/interfaces/contact";
 
 export function validateContactForm(form: Partial<Contact>): string | null {
   if (!form.civilite || !form.nom || !form.prenom || !form.email || !form.telephone || !form.pays) {
@@ -10,9 +10,9 @@ export function validateContactForm(form: Partial<Contact>): string | null {
     return "L'adresse e-mail est invalide.";
   }
 
-  const phoneRegex = /^[0-9]+$/;
+  const phoneRegex = /^[0-9]{10}$/;
   if (!phoneRegex.test(form.telephone)) {
-    return 'Le numéro de téléphone doit contenir uniquement des chiffres.';
+    return 'Le numéro de téléphone doit contenir exactement 10 chiffres.';
   }
 
   const countryRegex = /^[A-Za-zÀ-ÖØ-öø-ÿ\s'-]+$/;

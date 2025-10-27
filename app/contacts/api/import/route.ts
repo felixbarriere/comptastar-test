@@ -1,8 +1,8 @@
-import { validateContactForm } from '@/app/lib/validation';
+import { validateContactForm } from '@/app/contacts/lib/validation';
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
-import { Contact } from '@/app/interfaces/contact';
+import { Contact } from '@/interfaces/contact';
 
 export const POST = async (req: Request) => {
   try {
@@ -28,7 +28,6 @@ export const POST = async (req: Request) => {
       return NextResponse.json({ error: 'Validation échouée', details: errors }, { status: 400 });
     }
 
-    // Lire le JSON existant
     const filePath = path.join(process.cwd(), 'BDD', 'contacts.json');
     const existingData: Contact[] = JSON.parse(fs.readFileSync(filePath, 'utf8'));
 

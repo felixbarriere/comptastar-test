@@ -1,25 +1,29 @@
+'use client';
+
 import Link from 'next/link';
-import Image from 'next/image';
+import Header from './components/Header';
 
 export default function HomePage() {
   return (
     <main style={{ padding: '2rem', fontFamily: 'Arial, sans-serif' }}>
-      <Image 
-            src="/logo.png" 
-            alt="Logo" 
-            width={250} 
-            height={250}
-            className="object-contain mb-5"
-          />
-      <h1>Projet Comptastar</h1>
+      <Header logoSrc="/logo.png" logoAlt="Mon Logo" />
+      <div style={{ textAlign: 'center', width: "100%" }}>
+        <div className='home-nav'>
+          <h1>Projet Comptastar</h1>
 
-      <nav style={{ marginTop: '2rem' }}>
-        <Link href="/contacts">
-          <button style={{ padding: '0.5rem 1rem', cursor: 'pointer' }}>
-            Aller à la page Contacts
-          </button>
-        </Link>
-      </nav>
+          <nav style={{ margin: '2rem' }}>
+            <Link href="/contacts" className="link-bold-underline">
+              Gérez vos contacts
+            </Link>
+          </nav>
+          <nav>
+          <Link href="https://www.comptastar.fr/" className="link-bold-underline">
+              Demander un devis
+            </Link>
+          </nav>
+        </div>
+      </div>
+
     </main>
   );
 }

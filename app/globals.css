@@ -1,22 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #ff1a66;
-    --foreground: #ededed;
-  }
+  --background: #ff1a66;
+  --foreground: #ededed;
 }
 
 body {
@@ -28,11 +14,26 @@ body {
 h1 {
   font-size:x-large ;
   margin-bottom: 8px;
+  font-weight: bold;
 }
 
 h2 {
   font-size:large ;
-  margin-bottom: 5px;
+  margin: 15px 0;
+}
+
+.mg-t-15 {
+  margin-top: 15px;
+}
+
+.home-nav {
+  display: inline-block;
+  text-align: center;
+  border: 2px solid #FFD700;
+  border-radius: 5px;
+  padding: 0.5rem 1rem;
+  background-color: var(--foreground);
+  color: black
 }
 
 /* buttons */
@@ -47,12 +48,12 @@ a.button,
   cursor: pointer;
   color: white;
   background-color: #0070f3;
-  font-family: inherit; /* uniformise la font */
-  font-size: 1rem;      /* uniformise la taille */
-  line-height: 1.5;     /* uniformise la hauteur de ligne */
+  font-family: inherit;
+  font-size: 1rem;
+  line-height: 1.5;
   vertical-align: middle;
-  text-decoration: none; /* pour les liens */
-  box-sizing: border-box; /* inclut padding et border dans la taille */
+  text-decoration: none;
+  box-sizing: border-box;
   transition: all 0.2s ease-in-out;
 }
 
@@ -66,6 +67,12 @@ button.cancel {
 
 button:hover {
   opacity: 0.85;
+}
+
+/* links */
+.link-bold-underline {
+  font-weight: bold;
+  text-decoration: underline;
 }
 
 /* inputs */
