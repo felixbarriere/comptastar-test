@@ -1,4 +1,4 @@
-# 📚 Comptastar - Application CRUD Full-Stack
+# 📚 Comptastar - Application CRUD
 
 **Comptastar** est une application CRUD full-stack développée avec **Next.js**.  
 Elle permet de gérer des contacts via un formulaire manuel ou un import CSV.
