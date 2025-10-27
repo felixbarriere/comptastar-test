@@ -37,7 +37,6 @@ function normalizeCivilite(raw: string): string {
  */
 function normalizePays(raw: string): string {
     if (!raw) return '';
-    console.log({raw})
   return raw.slice(0, 2).toUpperCase();
 }
 

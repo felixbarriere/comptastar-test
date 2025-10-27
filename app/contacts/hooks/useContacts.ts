@@ -17,6 +17,9 @@ export function useContacts() {
     fetchContacts();
   }, []);
 
+  /**
+   * Récupération des données de la Base
+   */ 
   const fetchContacts = async () => {
     try {
       const res = await fetch('/contacts/api');
@@ -31,6 +34,9 @@ export function useContacts() {
     }
   };
 
+  /**
+   * Enregistrement des données du formulaire manuel
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const validationError = validateContactForm(form);
@@ -53,6 +59,9 @@ export function useContacts() {
     fetchContacts();
   };
 
+  /**
+   * Suppression des données de la Base
+   */ 
   const handleDelete = async (id: number) => {
     await fetch('/contacts/api', {
       method: 'DELETE',
@@ -62,8 +71,14 @@ export function useContacts() {
     fetchContacts();
   };
 
+  /**
+   * Modification des données de la Base
+   */ 
   const handleEdit = (c: Contact) => setForm(c);
 
+  /**
+   * Import du fichier CSV pour lecture
+   */ 
   const handleImport = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -79,6 +94,9 @@ export function useContacts() {
     }
   };
 
+  /**
+   * Enregistrement des données du CSV
+   */
   const handleImportSubmit = async () => {
     try {
       const transformed = transformContacts(imported);
@@ -96,8 +114,6 @@ export function useContacts() {
         return;
       }
       
-      console.log({validContacts})
-
       const res = await fetch('/contacts/api/import', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -117,6 +133,9 @@ export function useContacts() {
     }
   };
 
+  /**
+   * Annulation de l'affichage des données du CSV
+   */   
   const cancelSubmit = () => {
     setImported([]);
   };

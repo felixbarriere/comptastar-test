@@ -4,6 +4,9 @@ import fs from 'fs';
 import path from 'path';
 import { Contact } from '@/interfaces/contact';
 
+/**
+ * Envoie les données importées du CSV dans la Base de données
+ */
 export const POST = async (req: Request) => {
   try {
     const newContacts: Partial<Contact>[] = await req.json();

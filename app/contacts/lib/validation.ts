@@ -1,7 +1,9 @@
 import { Contact } from "@/interfaces/contact";
 
+/**
+ * Valide les formats du formulaire manuel à l'aide des regex spécifiques.
+ */
 export function validateContactForm(form: Partial<Contact>): string | null {
-  console.log({form})
   if (!form.civilite || !form.nom || !form.prenom || !form.email || !form.telephone || !form.pays) {
     return 'Tous les champs sont obligatoires.';
   }

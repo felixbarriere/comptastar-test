@@ -1,9 +1,10 @@
 import Papa from "papaparse";
 import { Contact } from "@/interfaces/contact";
 
+/**
+ * Parse les données CSV
+ */
 export function parseCSV(file: File): Promise<Partial<Contact>[]> {
-  console.log("parseCSV")
-
   return new Promise((resolve, reject) => {
     Papa.parse(file, {
       header: true,
@@ -25,6 +26,9 @@ export function parseCSV(file: File): Promise<Partial<Contact>[]> {
   });
 }
 
+/**
+ * Nettoie les données CSV (colonnes, trim)
+ */
 export function cleanCSVData(
   rawData: Partial<Contact>[],
   existingContacts: Contact[]

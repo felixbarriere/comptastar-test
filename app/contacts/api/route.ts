@@ -4,14 +4,9 @@ import path from 'path';
 
 const filePath = path.join(process.cwd(), 'BDD/contacts.json');
 
-function readContacts() {
-  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
-}
-
-function writeContacts(data: any) {
-  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
-}
-
+/**
+ * Routes CRUD
+ */
 export async function GET() {
   const contacts = readContacts();
   return NextResponse.json(contacts);
@@ -50,4 +45,15 @@ export async function DELETE(request: Request) {
   writeContacts(contacts);
 
   return NextResponse.json({ success: true });
+}
+
+function readContacts() {
+  return JSON.parse(fs.readFileSync(filePath, 'utf-8'));
+}
+
+/**
+ * Outils
+ */
+function writeContacts(data: any) {
+  fs.writeFileSync(filePath, JSON.stringify(data, null, 2));
 }

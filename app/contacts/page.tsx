@@ -25,8 +25,9 @@ export default function ContactsPage() {
       <Header logoSrc="/logo.png" logoAlt="Mon Logo" />
       <div className='contact-container'>
         <h1 className='mg-b-25' style={{ textAlign: 'center', width: "100%" }}>Gestion des Contacts</h1>
-        <p>Cette page vous permet d'ajouter, modifier ou supprimer des contacts. Vous pouvez également ajouter une liste existante via le bouton 'Choisir un fichier'.
-        </p><br />
+        <p>Cette page vous permet d'ajouter, modifier ou supprimer des contacts.
+          Vous pouvez également ajouter une liste existante via le bouton 'Choisir un fichier'.
+        </p><br/>
 
         {/* --- Formulaire manuel --- */}
           <form onSubmit={handleSubmit} style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
@@ -48,8 +49,6 @@ export default function ContactsPage() {
           <div className='mg-t-15'>
             <input type="file" accept=".csv" onChange={handleImport} />
           </div>
-        {/* </div> */}
-
 
         {/* --- Tableau des données importées --- */}
         {imported.length > 0 && (
